@@ -432,7 +432,7 @@ class AsuraScans extends paperback_extensions_common_1.Source {
             status: status,
             artist: details[1],
             author: details[2],
-            desc: encodeURIComponent(description),
+            desc: decodeURIComponent(description),
             // follows: , 
             // tags: ,
             lastUpdate: new Date(details[6]),
