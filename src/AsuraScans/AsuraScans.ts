@@ -66,17 +66,17 @@ export class AsuraScans extends Source {
                 status = MangaStatus.ONGOING;
         }
 
-        let image = $('.thumb > img').attr('src')!.trim()
+        let image = $('.thumb > img').attr('src')!.trim();
 
         let rating = $('.num').text()!.trim();
 
         let details = $('.fmed > span').toArray()
-            .map(detail => $(detail).text().trim())
+            .map(detail => $(detail).text().trim());
 
         let description = $('p').toArray()
             .map(desc => $(desc).text().trim())
             .slice(0, -1)
-            .join('\n')
+            .join('\n');
 
         return createManga({
             id: mangaId,
@@ -168,33 +168,60 @@ export class AsuraScans extends Source {
     override async getHomePageSections(sectionCallback: (section: HomeSection) => void): Promise<void> {
         let request = createRequestObject({
             url: BASE_URL,
-            method: "GET",
+            method: 'GET',
         });
 
         let response = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(response.data);
 
         let featuredSection = createHomeSection({
-            id: "0",
+            id: '0',
             title: 'Featured',
             view_more: true,
             type: HomeSectionType.featured,
         });
-        sectionCallback(featuredSection)
+        sectionCallback(featuredSection);
         featuredSection.items = $('.slide-item').toArray()
             .map(manga => createMangaTile({
                 id: $(manga).find('a').attr('href')!.trim(),
                 title: createIconText({ text: $(manga).find('.ellipsis').text()!.trim() }),
                 image: $(manga).find('img').attr('src')!.trim()
-            }))
-        sectionCallback(featuredSection)
+            }));
+        sectionCallback(featuredSection);
 
         // Popular Today
+        let popularTodaySection = createHomeSection({
+            id: '1',
+            title: 'Popular Today',
+            view_more: true,
+            type: HomeSectionType.singleRowNormal,
+        });
+        sectionCallback(popularTodaySection);
+        popularTodaySection.items = $('.bixbox > div > div.bs').toArray()
+        .map(manga => createMangaTile({
+            id: $(manga).find('a').attr('href')!.trim(),
+            title: createIconText({ text: $(manga).find('a').attr('title')!.trim(), }),
+            image: $(manga).find('img').attr('src')!.trim(), 
+        }));
+        sectionCallback(popularTodaySection);
         // Popular Weekly
         // Popular Monthly
         // Popular All Time
         // Latest Update
-
+        let lastestUpdateSection = createHomeSection({
+            id: '1',
+            title: 'Popular Today',
+            view_more: true,
+            type: HomeSectionType.singleRowNormal,
+        });
+        sectionCallback(lastestUpdateSection);
+        popularTodaySection.items = $('.bixbox > div > div.utao').toArray()
+        .map(manga => createMangaTile({
+            id: $(manga).find('a').attr('href')!.trim(),
+            title: createIconText({ text: $(manga).find('a').attr('title')!.trim(), }),
+            image: $(manga).find('img').attr('src')!.trim(), 
+        }));
+        sectionCallback(lastestUpdateSection);
     }
 
 }
