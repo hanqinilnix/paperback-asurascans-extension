@@ -205,12 +205,54 @@ export class AsuraScans extends Source {
         }));
         sectionCallback(popularTodaySection);
         // Popular Weekly
+        let popWeeklySection = createHomeSection({
+            id: '2',
+            title: 'Weekly Popular',
+            view_more: true,
+            type: HomeSectionType.singleRowNormal,
+        });
+        sectionCallback(popWeeklySection);
+        popWeeklySection.items = $('.wpop-weekly > ul > li').toArray()
+        .map(manga => createMangaTile({
+            id: $(manga).find('a').attr('href')!.trim(),
+            title: createIconText({ text: $(manga).find('h2').text()!.trim(), }),
+            image: $(manga).find('img').attr('src')!.trim(), 
+        }));
+        sectionCallback(popWeeklySection);
         // Popular Monthly
+        let popMonthlySection = createHomeSection({
+            id: '3',
+            title: 'Monthly Popular',
+            view_more: true,
+            type: HomeSectionType.singleRowNormal,
+        });
+        sectionCallback(popMonthlySection);
+        popMonthlySection.items = $('.wpop-monthly > ul > li').toArray()
+        .map(manga => createMangaTile({
+            id: $(manga).find('a').attr('href')!.trim(),
+            title: createIconText({ text: $(manga).find('h2').text()!.trim(), }),
+            image: $(manga).find('img').attr('src')!.trim(), 
+        }));
+        sectionCallback(popMonthlySection);
         // Popular All Time
+        let popAllTimeSection = createHomeSection({
+            id: '4',
+            title: 'All Time Popular',
+            view_more: true,
+            type: HomeSectionType.singleRowNormal,
+        });
+        sectionCallback(popAllTimeSection);
+        popAllTimeSection.items = $('.wpop-alltime > ul > li').toArray()
+        .map(manga => createMangaTile({
+            id: $(manga).find('a').attr('href')!.trim(),
+            title: createIconText({ text: $(manga).find('h2').text()!.trim(), }),
+            image: $(manga).find('img').attr('src')!.trim(), 
+        }));
+        sectionCallback(popAllTimeSection);
         // Latest Update
         let lastestUpdateSection = createHomeSection({
-            id: '1',
-            title: 'Popular Today',
+            id: '5',
+            title: 'Latest Update',
             view_more: true,
             type: HomeSectionType.singleRowNormal,
         });
