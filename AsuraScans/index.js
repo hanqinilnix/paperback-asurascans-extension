@@ -432,7 +432,7 @@ class AsuraScans extends paperback_extensions_common_1.Source {
             status: status,
             artist: details[1],
             author: details[2],
-            desc: description,
+            desc: encodeURIComponent(description),
             // follows: , 
             // tags: ,
             lastUpdate: new Date(details[6]),
@@ -477,7 +477,7 @@ class AsuraScans extends paperback_extensions_common_1.Source {
     }
     async getSearchResults(searchQuery, metadata) {
         let request = createRequestObject({
-            url: `${BASE_URL}?s=${searchQuery.title}`,
+            url: `${BASE_URL}?s=${encodeURIComponent(searchQuery.title)}`,
             method: 'GET',
         });
         let response = await this.requestManager.schedule(request, 1);
