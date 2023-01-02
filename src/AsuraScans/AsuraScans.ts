@@ -88,7 +88,7 @@ export class AsuraScans extends Source {
             artist: details[1],
             author: details[2],
 
-            desc: description,
+            desc: encodeURIComponent(description),
             // follows: , 
             // tags: ,
             lastUpdate: new Date(details[6]!),
@@ -142,7 +142,7 @@ export class AsuraScans extends Source {
 
     override async getSearchResults(searchQuery: SearchRequest, metadata: any): Promise<PagedResults> {
         let request = createRequestObject({
-            url: `${BASE_URL}?s=${searchQuery.title!}`,
+            url: `${BASE_URL}?s=${encodeURIComponent(searchQuery.title!)}`,
             method: 'GET',
         });
 
