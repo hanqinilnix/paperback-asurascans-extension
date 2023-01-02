@@ -88,7 +88,7 @@ export class AsuraScans extends Source {
             artist: details[1],
             author: details[2],
 
-            desc: encodeURIComponent(description),
+            desc: decodeURIComponent(description),
             // follows: , 
             // tags: ,
             lastUpdate: new Date(details[6]!),
