@@ -1,7 +1,9 @@
 {
-  "name": "extensions-main",
+  "name": "AsuraScans",
   "version": "1.0.0",
-  "description": "The default source for Paperback, MangaDex",
+  "repositoryName": "AsuraScans",
+  "description": "Paperback Extension for AsuraScans",
+  "baseURL": "https://hanqinilnix.github.io/paperback-asurascans-extension/",
   "main": "index.js",
   "scripts": {
     "start": "tsc && node dist/api.js",
