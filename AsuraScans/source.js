@@ -452,7 +452,8 @@ class AsuraScans extends paperback_extensions_common_1.Source {
             .map(chapter => createChapter({
             id: $(chapter).find('a').attr('href').trim(),
             mangaId: mangaId,
-            chapNum: getChapterNumber($(chapter).find('.chapternum').text().trim()),
+            chapNum: getChapterNumber($(chapter).attr('data-num').trim()),
+            name: $(chapter).find('.chapternum').text().trim(),
             langCode: paperback_extensions_common_1.LanguageCode.ENGLISH,
             time: new Date($(chapter).find('.chapterdate').text().trim()),
         }));
@@ -497,12 +498,12 @@ class AsuraScans extends paperback_extensions_common_1.Source {
     async getHomePageSections(sectionCallback) {
         let request = createRequestObject({
             url: BASE_URL,
-            method: "GET",
+            method: 'GET',
         });
         let response = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(response.data);
         let featuredSection = createHomeSection({
-            id: "0",
+            id: '0',
             title: 'Featured',
             view_more: true,
             type: paperback_extensions_common_1.HomeSectionType.featured,
@@ -516,10 +517,38 @@ class AsuraScans extends paperback_extensions_common_1.Source {
         }));
         sectionCallback(featuredSection);
         // Popular Today
+        let popularTodaySection = createHomeSection({
+            id: '1',
+            title: 'Popular Today',
+            view_more: true,
+            type: paperback_extensions_common_1.HomeSectionType.singleRowNormal,
+        });
+        sectionCallback(popularTodaySection);
+        popularTodaySection.items = $('.bixbox > div > div.bs').toArray()
+            .map(manga => createMangaTile({
+            id: $(manga).find('a').attr('href').trim(),
+            title: createIconText({ text: $(manga).find('a').attr('title').trim(), }),
+            image: $(manga).find('img').attr('src').trim(),
+        }));
+        sectionCallback(popularTodaySection);
         // Popular Weekly
         // Popular Monthly
         // Popular All Time
         // Latest Update
+        let lastestUpdateSection = createHomeSection({
+            id: '1',
+            title: 'Popular Today',
+            view_more: true,
+            type: paperback_extensions_common_1.HomeSectionType.singleRowNormal,
+        });
+        sectionCallback(lastestUpdateSection);
+        popularTodaySection.items = $('.bixbox > div > div.utao').toArray()
+            .map(manga => createMangaTile({
+            id: $(manga).find('a').attr('href').trim(),
+            title: createIconText({ text: $(manga).find('a').attr('title').trim(), }),
+            image: $(manga).find('img').attr('src').trim(),
+        }));
+        sectionCallback(lastestUpdateSection);
     }
 }
 exports.AsuraScans = AsuraScans;
