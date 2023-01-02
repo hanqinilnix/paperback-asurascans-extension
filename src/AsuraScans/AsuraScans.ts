@@ -13,6 +13,8 @@ import {
     SourceInfo,
 } from "paperback-extensions-common";
 
+import entities = require('entities')
+
 let BASE_URL = 'https://www.asurascans.com/';
 
 export let AsuraScansInfo: SourceInfo = {
@@ -32,6 +34,10 @@ export class AsuraScans extends Source {
         requestTimeout: 10000,
     });
 
+    protected decodeHTMLEntity(str: string): string {
+        return entities.decodeHTML(str)
+    }
+
     override async getMangaDetails(mangaId: string): Promise<Manga> {
         let request = createRequestObject({
             url: mangaId,
@@ -42,7 +48,7 @@ export class AsuraScans extends Source {
         let $ = this.cheerio.load(response.data);
 
         let titles: string[] = [];
-        titles.push($('.entry-title').text()!)
+        titles.push(this.decodeHTMLEntity($('.entry-title').text()!))
 
         let statusString = $('.imptdt > i').text()!;
         let status: MangaStatus;
@@ -88,7 +94,7 @@ export class AsuraScans extends Source {
             artist: details[1],
             author: details[2],
 
-            desc: decodeURIComponent(description),
+            desc: this.decodeHTMLEntity(description),
             // follows: , 
             // tags: ,
             lastUpdate: new Date(details[6]!),
@@ -184,7 +190,7 @@ export class AsuraScans extends Source {
         featuredSection.items = $('.slide-item').toArray()
             .map(manga => createMangaTile({
                 id: $(manga).find('a').attr('href')!.trim(),
-                title: createIconText({ text: $(manga).find('.ellipsis').text()!.trim() }),
+                title: createIconText({ text: this.decodeHTMLEntity($(manga).find('.ellipsis').text()!.trim()) }),
                 image: $(manga).find('img').attr('src')!.trim()
             }));
         sectionCallback(featuredSection);
@@ -198,11 +204,11 @@ export class AsuraScans extends Source {
         });
         sectionCallback(popularTodaySection);
         popularTodaySection.items = $('.bixbox > div > div.bs').toArray()
-        .map(manga => createMangaTile({
-            id: $(manga).find('a').attr('href')!.trim(),
-            title: createIconText({ text: $(manga).find('a').attr('title')!.trim(), }),
-            image: $(manga).find('img').attr('src')!.trim(), 
-        }));
+            .map(manga => createMangaTile({
+                id: $(manga).find('a').attr('href')!.trim(),
+                title: createIconText({ text: this.decodeHTMLEntity($(manga).find('a').attr('title')!.trim()), }),
+                image: $(manga).find('img').attr('src')!.trim(),
+            }));
         sectionCallback(popularTodaySection);
         // Popular Weekly
         let popWeeklySection = createHomeSection({
@@ -213,11 +219,11 @@ export class AsuraScans extends Source {
         });
         sectionCallback(popWeeklySection);
         popWeeklySection.items = $('.wpop-weekly > ul > li').toArray()
-        .map(manga => createMangaTile({
-            id: $(manga).find('a').attr('href')!.trim(),
-            title: createIconText({ text: $(manga).find('h2').text()!.trim(), }),
-            image: $(manga).find('img').attr('src')!.trim(), 
-        }));
+            .map(manga => createMangaTile({
+                id: $(manga).find('a').attr('href')!.trim(),
+                title: createIconText({ text: this.decodeHTMLEntity($(manga).find('h2').text()!.trim()), }),
+                image: $(manga).find('img').attr('src')!.trim(),
+            }));
         sectionCallback(popWeeklySection);
         // Popular Monthly
         let popMonthlySection = createHomeSection({
@@ -228,11 +234,11 @@ export class AsuraScans extends Source {
         });
         sectionCallback(popMonthlySection);
         popMonthlySection.items = $('.wpop-monthly > ul > li').toArray()
-        .map(manga => createMangaTile({
-            id: $(manga).find('a').attr('href')!.trim(),
-            title: createIconText({ text: $(manga).find('h2').text()!.trim(), }),
-            image: $(manga).find('img').attr('src')!.trim(), 
-        }));
+            .map(manga => createMangaTile({
+                id: $(manga).find('a').attr('href')!.trim(),
+                title: createIconText({ text: this.decodeHTMLEntity($(manga).find('h2').text()!.trim()), }),
+                image: $(manga).find('img').attr('src')!.trim(),
+            }));
         sectionCallback(popMonthlySection);
         // Popular All Time
         let popAllTimeSection = createHomeSection({
@@ -243,11 +249,11 @@ export class AsuraScans extends Source {
         });
         sectionCallback(popAllTimeSection);
         popAllTimeSection.items = $('.wpop-alltime > ul > li').toArray()
-        .map(manga => createMangaTile({
-            id: $(manga).find('a').attr('href')!.trim(),
-            title: createIconText({ text: $(manga).find('h2').text()!.trim(), }),
-            image: $(manga).find('img').attr('src')!.trim(), 
-        }));
+            .map(manga => createMangaTile({
+                id: $(manga).find('a').attr('href')!.trim(),
+                title: createIconText({ text: this.decodeHTMLEntity($(manga).find('h2').text()!.trim()), }),
+                image: $(manga).find('img').attr('src')!.trim(),
+            }));
         sectionCallback(popAllTimeSection);
         // Latest Update
         let lastestUpdateSection = createHomeSection({
@@ -258,11 +264,11 @@ export class AsuraScans extends Source {
         });
         sectionCallback(lastestUpdateSection);
         lastestUpdateSection.items = $('.bixbox > div > div.utao').toArray()
-        .map(manga => createMangaTile({
-            id: $(manga).find('a').attr('href')!.trim(),
-            title: createIconText({ text: $(manga).find('a').attr('title')!.trim(), }),
-            image: $(manga).find('img').attr('src')!.trim(), 
-        }));
+            .map(manga => createMangaTile({
+                id: $(manga).find('a').attr('href')!.trim(),
+                title: createIconText({ text: this.decodeHTMLEntity($(manga).find('a').attr('title')!.trim()), }),
+                image: $(manga).find('img').attr('src')!.trim(),
+            }));
         sectionCallback(lastestUpdateSection);
     }
 
