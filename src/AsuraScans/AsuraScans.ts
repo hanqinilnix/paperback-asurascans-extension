@@ -112,7 +112,8 @@ export class AsuraScans extends Source {
             .map(chapter => createChapter({
                 id: $(chapter).find('a').attr('href')!.trim(),
                 mangaId: mangaId,
-                chapNum: getChapterNumber($(chapter).find('.chapternum').text()!.trim()),
+                chapNum: getChapterNumber($(chapter).attr('data-num')!.trim()),
+                name: $(chapter).find('.chapternum').text()!.trim(),
                 langCode: LanguageCode.ENGLISH,
                 time: new Date($(chapter).find('.chapterdate').text()!.trim()),
             }));
