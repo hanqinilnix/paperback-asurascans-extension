@@ -542,7 +542,7 @@ class AsuraScans extends paperback_extensions_common_1.Source {
             type: paperback_extensions_common_1.HomeSectionType.singleRowNormal,
         });
         sectionCallback(lastestUpdateSection);
-        popularTodaySection.items = $('.bixbox > div > div.utao').toArray()
+        lastestUpdateSection.items = $('.bixbox > div > div.utao').toArray()
             .map(manga => createMangaTile({
             id: $(manga).find('a').attr('href').trim(),
             title: createIconText({ text: $(manga).find('a').attr('title').trim(), }),
